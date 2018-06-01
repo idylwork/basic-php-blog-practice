@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  php:
+    build:
+      context: ./docker/php
+    container_name: blog_trial
+    volumes:
+      - ./docker/php.ini:/usr/local/etc/php/php.ini
+      - ./lib:/var/www/lib
+      - ./public:/var/www/html
+    ports:
+      - 8000:80
+  mysql:
+    image: mysql:8.0
+    container_name: mysql8
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/charset.cnf:/etc/mysql/conf.d/charset.cnf
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=blog_db
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+volumes:
+  mysql_data:

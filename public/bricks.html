@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="css/tagsinput.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+<script type="text/javascript">
+  let log = console.log.bind('console');
+  function debug(arg, title = "", style="") {
+    if (title) { title += ': ' }
+    if (typeof arg === 'object') {
+      console.dir(arg);
+    } else {
+      console.log('%c' + title + '%c' + arg, 'color: #9999cc', '');
+    }
+  }
+  const settings = {
+    margin: {width: 20, height: 10},
+    wrapId: 'block-article',
+    cardClassName: 'card',
+  };
+
+  window.addEventListener('DOMContentLoaded', function() {
+    /** 全体のNode */
+    let wrap = document.getElementById(settings.wrapId);
+    /** カードのNode **/
+    let cards = wrap.getElementsByClassName(settings.cardClassName);
+    /** 全体の幅 */
+    let wrapWidth = wrap.offsetWidth; //全体の幅
+    /** カードの幅 */
+    let cardWidth = cards[0].offsetWidth + settings.margin.width;
+    /** カラムごとの高さ {array} */
+    let colHeights = Array.apply(null, Array(Math.floor((wrapWidth + settings.margin.width) / cardWidth))).map(() => { return 0; }); //列数分の要素を0による初期化
+    /** 最初の行かどうか {bool} */
+    let firstRow = true;
+    /** 一番低い高さ **/
+    let lowestHeight = 0;
+    /** 一番低い列 **/
+    let lowestCol = 0;
+    Array.prototype.forEach.call(cards, function(card, cardId) {
+
+      if (firstRow) {
+        // 最初の行だけそのままの順序で並べる。以降は最も高さの小さい列に。
+        lowestHeight = 0;
+        lowestCol = cardId;
+        if (cardId +1 >= colHeights.length) {
+          firstRow = false;
+        }
+      } else {
+        // 一番低い列を調べる
+        lowestHeight = colHeights[0];
+        lowestCol = 0;
+        colHeights.forEach(function(_height, _col) {
+          if (_height < lowestHeight) {
+            lowestHeight = _height;
+            lowestCol = _col;
+          }
+        });
+      }
+
+      //高さは一番低い高さから 横は個数から
+      card.style.top = lowestHeight + settings.margin.height + 'px';
+      card.style.left = cardWidth * lowestCol + 'px';
+      colHeights[lowestCol] += card.offsetHeight + settings.margin.height;
+    });
+  });
+
+
+</script>
+<style>
+  #block-article {
+    position: relative;
+    width: 100%;
+  }
+  #block-article .card {
+    position: absolute;
+    width: 250px;
+  }
+</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <a class="navbar-brand" href="./">Basic Post System</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="./">Home</a>
+          </li>
+        </ul>
+        <form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>" class="form-inline my-2 my-lg-0">
+          <div class="input-group">
+            <input type="password" name="login_password" class="form-control" placeholder="Password" aria-label="Password">
+            <span class="input-group-btn">
+              <button type="submit" method="post" name="login_submit" class="btn btn-success my-2 my-sm-0">Login</button>
+            </span>
+          </div>
+        </form>
+      </div>
+    </nav>
+
+  <div id="block-article" class="">
+    <div class="motocol">
+      <div class="card bg-light card-article">
+        <div class="card-body">
+          <h4 class="card-title">Node.js npmによるパッケージ管理</h4>
+          <div class="card-body tags-list">
+            <span class="badge badge-info">
+              diary              </span>
+            <span class="badge badge-info">
+              test              </span>
+          </div>
+
+
+          <p class="card-text">
+            npmはNode.jsをインストールすると付属してインストールされる。          </p>
+        </div>
+        <div class="card-body">
+
+          <p class="card-text comment-trim">
+            <i class="fa fa-comment mr-1"></i><strong>誰か</strong>
+            コメント          </p>
+
+          <p class="card-text comment-trim">
+            <i class="fa fa-comment mr-1"></i><strong>どなたか</strong>
+            なるほど          </p>
+          <p class="card-text">…他1件のコメント</p>        </div>
+        <div class="card-body">
+          <a href="single.php?id=6"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 詳細</a>
+        </div>
+      </div>
+    </div>
+    <div class="motocol">
+      <div class="card bg-light card-article">
+        <div class="card-body">
+          <h4 class="card-title">test</h4>
+          <div class="card-body tags-list">
+            <span class="badge badge-info">
+              memo              </span>
+          </div>
+
+
+          <p class="card-text">
+            testaa          </p>
+        </div>
+        <div class="card-body">
+
+          <p class="card-text comment-trim">
+            <i class="fa fa-comment mr-1"></i><strong>プリペアドステートメント</strong>
+            $pdo-&gt;query()の代わりに<br>
+            prepareであらかじめSQL文のテンプレートを定義しておき<br>
+            ?で指定したパラメータをbindValueで設定する<br>
+            executeでSQL文を実行する<br>
+            <br>
+            $stmt = $dbh-&gt;prepare("SELECT * FROM Table WHERE CompanyID = ?");<br>
+            $stmt-&gt;bindValue(1, $arrA[0]['CompanyID']);<br>
+            $stmt-&gt;execute();<br>
+          </p>
+        </div>
+        <div class="card-body">
+          <a href="single.php?id=10"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 詳細</a>
+        </div>
+      </div>
+    </div>
+    <div class="motocol">
+      <div class="card bg-light card-article">
+        <div class="card-body">
+          <h4 class="card-title">test</h4>
+          <div class="card-body tags-list">
+            <span class="badge badge-info">
+              memo              </span>
+          </div>
+
+
+          <p class="card-text">
+            testaa          </p>
+        </div>
+        <div class="card-body">
+
+          <p class="card-text comment-trim">
+            <i class="fa fa-comment mr-1"></i><strong>プリペアドステートメント</strong>
+            $pdo-&gt;query()の代わりに<br>
+            prepareであらかじめSQL文のテンプレートを定義しておき<br>
+            ?で指定したパラメータをbindValueで設定する<br>
+            executeでSQL文を実行する<br>
+            <br>
+            $stmt = $dbh-&gt;prepare("SELECT * FROM Table WHERE CompanyID = ?");<br>
+            $stmt-&gt;bindValue(1, $arrA[0]['CompanyID']);<br>
+            $stmt-&gt;execute();<br>
+          </p>
+        </div>
+        <div class="card-body">
+          <a href="single.php?id=10"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 詳細</a>
+        </div>
+      </div>
+    </div>
+    <div class="motocol">
+      <div class="card bg-light card-article">
+        <div class="card-body">
+          <h4 class="card-title">PHPのオブジェクト指向</h4>
+          <div class="card-body tags-list">
+            <span class="badge badge-info">
+              memo              </span>
+            <span class="badge badge-info">
+              php              </span>
+          </div>
+
+
+          <p class="card-text">
+            ## オブジェクト<br>
+            パラメータやメソッド<br>
+            <br>
+            手続き型の『手続き』に相当する、オブジェクト指向型の処理<br>
+            パラメータとメソッドに分けられる<br>
+            <br>
+            商品が異なる場合や異なる手続きが必要な場合に<br>
+            手続き型では大きく処理を書き換える必要がある。<br>
+            オブジェクト志向ではパラメータやメソッド(どちらもオブジェクト)は一つ...          </p>
+        </div>
+        <div class="card-body">
+          <a href="single.php?id=11"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 詳細</a>
+        </div>
+      </div>
+    </div>
+    <div class="motocol">
+      <div class="card bg-light card-article">
+        <div class="card-body">
+          <h4 class="card-title">aaa</h4>
+          <div class="card-body tags-list">
+            <span class="badge badge-info">
+              test              </span>
+          </div>
+
+
+          <p class="card-text">
+            aaaaa          </p>
+        </div>
+        <div class="card-body">
+          <a href="single.php?id=12"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 詳細</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/tether.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/tagsinput.js"></script>
+<script type="text/javascript">
+  //    $('#id').find('.class');
+  $('.tagsinput').tagsinput({
+    tagClass: '',
+    maxChars: 20,
+    maxTags: 20,
+    trimValue: true,
+    confirmKeys: [13, 32, 188],
+  });
+
+  window.onload = function disable_double_click(btn) {
+    btn.disabled = true;
+    //      var forms = document.forms;
+    //      forms.forEach(function(_link, _winId){
+    //
+    //      });
+  }
+
+</script>
+</body>
+</html>
