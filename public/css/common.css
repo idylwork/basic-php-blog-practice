@@ -1,0 +1,81 @@
+.hidden {
+  display: none;
+}
+
+.navbar {
+  margin-bottom: 15px;
+}
+
+.card-body.tags-list {
+  padding: 0 8px 20px;
+}
+
+.tags-list > .badge {
+  color: #acaead;
+  background: unset;
+  border: 1px solid #bababa;
+  text-transform: capitalize;
+}
+
+div.card-body {
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding: 1.25rem;
+}
+
+div.card {
+  margin-bottom: 20px;
+}
+.alert {
+  margin-top: 1rem;
+}
+.alert > *:last-child {
+  margin-bottom: 0;
+}
+
+/**
+ * コメント入力フォーム
+ */
+.comment .test {
+  display: none;
+}
+.comment .comment-on {
+  display: block;
+}
+
+@keyframes appear-open-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: 300px}
+}
+.comment-appear {
+  animation-name: appear-open-down;
+  animation-duration: 1s;
+  animation-direction: normal;
+  animation-timing-function: cubic-bezier(0.39, 0.575, 0.565, 1);
+  animation-iteration-count: infiite;
+  overflow: hidden;
+}
+.comment-trim {
+  max-height: 200px;
+  text-overflow: ellipsis;
+  overflow:hidden;
+  white-space: nowrap;
+}
+
+
+
+#block-article {
+  position: relative; /* bricks.js */
+  margin: 0 20px;
+}
+#block-article .card-article {
+  width: 300px; /* bricks.js */
+  position: absolute; /* bricks.js */
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.03); /* bricks.js */
+  background-color: #f8f9fa !important;
+  box-shadow: 0 15px 35px #eeeeee;
+  border-radius: unset;
+}
